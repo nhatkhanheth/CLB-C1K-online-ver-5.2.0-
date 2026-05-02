@@ -53,7 +53,8 @@ nav a{display:flex;align-items:center;gap:10px;padding:10px 20px;color:var(--mut
   transition:all .15s;border-left:3px solid transparent}
 nav a:hover{color:var(--txt);background:var(--surf2)}
 nav a.active{color:var(--acc);background:var(--acc-d);border-left-color:var(--acc)}
-.tab-icon{font-size:16px;line-height:1}
+.tab-icon{display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tab-icon svg{width:18px;height:18px}
 nav .sp{flex:1}
 nav .foot{padding:12px 16px;border-top:1px solid var(--bord);font-size:11px;color:var(--mut)}
 main{margin-left:220px;flex:1;padding:28px 32px;padding-top:58px;max-width:1120px}
@@ -222,9 +223,14 @@ tr:hover td{background:var(--surf2)}
   }
 
   nav a .tab-icon {
-    font-size: 22px;
-    line-height: 1;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  nav a .tab-icon svg {
+    width: 24px;
+    height: 24px;
   }
 
   nav a.active {
@@ -238,8 +244,8 @@ tr:hover td{background:var(--surf2)}
   main {
     margin-left: 0;
     padding: 12px 14px;
-    padding-top: 60px;
-    padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px));
+    padding-top: 70px;
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
     max-width: 100%;
   }
 
@@ -249,9 +255,11 @@ tr:hover td{background:var(--surf2)}
     right: 0;
     border-left: none;
     border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
     justify-content: space-between;
-    padding: 9px 16px;
+    padding: 10px 16px;
     font-size: 13px;
+    height: 52px;
   }
 
   /* ── Stats grid ── */
@@ -425,12 +433,30 @@ tr:hover td{background:var(--surf2)}
 <div class="shell">
 <nav>
   <div class="logo"><div class="logo-t">💰 CLB C1K</div><div class="logo-s">Quản lý chi tiêu tập thể</div></div>
-  <a onclick="go('dash')" class="active" id="nav-dash"><span class="tab-icon">📊</span>Tổng quan</a>
-  <a onclick="go('members')" id="nav-members"><span class="tab-icon">👥</span>Thành viên</a>
-  <a onclick="go('record')" id="nav-record"><span class="tab-icon">✏️</span>Ghi tiêu</a>
-  <a onclick="go('recurring')" id="nav-recurring"><span class="tab-icon">🔁</span>Định kỳ</a>
-  <a onclick="go('history')" id="nav-history"><span class="tab-icon">📋</span>Lịch sử</a>
-  <a onclick="go('export')" id="nav-export"><span class="tab-icon">📤</span>Xuất</a>
+  <a onclick="go('dash')" class="active" id="nav-dash">
+    <span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="13" width="4" height="8"/><rect x="10" y="9" width="4" height="12"/><rect x="17" y="5" width="4" height="16"/></svg></span>
+    Tổng quan
+  </a>
+  <a onclick="go('members')" id="nav-members">
+    <span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.87"/></svg></span>
+    Thành viên
+  </a>
+  <a onclick="go('record')" id="nav-record">
+    <span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>
+    Ghi tiêu
+  </a>
+  <a onclick="go('recurring')" id="nav-recurring">
+    <span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></span>
+    Định kỳ
+  </a>
+  <a onclick="go('history')" id="nav-history">
+    <span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+    Lịch sử
+  </a>
+  <a onclick="go('export')" id="nav-export">
+    <span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></span>
+    Xuất
+  </a>
   <div class="sp"></div>
   <div class="foot" id="sync-nav">Firebase</div>
 </nav>
