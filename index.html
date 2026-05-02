@@ -271,10 +271,10 @@ tr:hover td{background:var(--surf2)}
     <div class="sec">Nạp / Trả tiền</div>
     <div class="fg mb12">
       <div><label>Thành viên</label><select id="topup-mem"></select></div>
-      <div><label>Số tiền (VND) — âm để trừ</label>
+      <div><label>Số tiền (×1000 tự động) — âm để trừ</label>
         <div style="display:flex;gap:6px;align-items:center">
-          <input type="number" id="topup-amt" placeholder="500000" step="1000" style="flex:1">
-          <button type="button" onclick="applyK('topup-amt')" class="btn by" style="padding:7px 10px;font-size:12px;white-space:nowrap;flex-shrink:0">×k</button>
+          <input type="number" id="topup-amt" placeholder="500 (= 500,000₫)" step="1000" style="flex:1">
+          <button type="button" onclick="applyK('topup-amt')" class="btn by" style="padding:7px 10px;font-size:12px;white-space:nowrap;flex-shrink:0"> ÷k</button>
         </div>
       </div>
     </div>
@@ -335,8 +335,8 @@ tr:hover td{background:var(--surf2)}
       <div class="fg mb12" id="amt-row">
         <div><label id="amt-label">Tổng tiền (VND)</label>
           <div style="display:flex;gap:6px;align-items:center">
-            <input type="number" id="sess-amt" placeholder="500000" step="1000" oninput="calcPP()" style="flex:1">
-            <button type="button" onclick="applyK('sess-amt',calcPP)" class="btn by" style="padding:7px 10px;font-size:12px;white-space:nowrap;flex-shrink:0">×k</button>
+            <input type="number" id="sess-amt" placeholder="500 (= 500,000₫)" step="1000" oninput="calcPP()" style="flex:1">
+            <button type="button" onclick="applyK('sess-amt',calcPP)" class="btn by" style="padding:7px 10px;font-size:12px;white-space:nowrap;flex-shrink:0"> ÷k</button>
           </div>
         </div>
         <div id="pp-display" style="display:none">
@@ -378,10 +378,10 @@ tr:hover td{background:var(--surf2)}
     <div class="card">
       <div class="fg mb12">
         <div><label>Thành viên</label><select id="q-mem"></select></div>
-        <div><label>Số tiền (VND) — âm để trừ</label>
+        <div><label>Số tiền (×1000 tự động) — âm để trừ</label>
           <div style="display:flex;gap:6px;align-items:center">
-            <input type="number" id="q-amt" placeholder="500000" step="1000" style="flex:1">
-            <button type="button" onclick="applyK('q-amt')" class="btn by" style="padding:7px 10px;font-size:12px;white-space:nowrap;flex-shrink:0">×k</button>
+            <input type="number" id="q-amt" placeholder="500 (= 500,000₫)" step="1000" style="flex:1">
+            <button type="button" onclick="applyK('q-amt')" class="btn by" style="padding:7px 10px;font-size:12px;white-space:nowrap;flex-shrink:0"> ÷k</button>
           </div>
         </div>
       </div>
@@ -505,12 +505,12 @@ tr:hover td{background:var(--surf2)}
     <div class="mt">Thêm thành viên</div>
     <div class="mb12"><label>Tên</label><input type="text" id="mem-name" placeholder="Nguyễn Văn A"></div>
     <div class="mb12">
-      <label>Số dư ban đầu (VND)</label>
+      <label>Số dư ban đầu (×1000 tự động)</label>
       <div style="display:flex;gap:6px;align-items:center">
         <input type="number" id="mem-bal" placeholder="0" value="0" style="flex:1">
-        <button type="button" onclick="applyK('mem-bal')" class="btn by" style="padding:7px 10px;font-size:12px;white-space:nowrap;flex-shrink:0">×k</button>
+        <button type="button" onclick="applyK('mem-bal')" class="btn by" style="padding:7px 10px;font-size:12px;white-space:nowrap;flex-shrink:0"> ÷k</button>
       </div>
-      <p class="tm mt8">Dương = có tiền · Âm = đang nợ · Bấm ×k để nhân 1000</p>
+      <p class="tm mt8">Dương = có tiền · Âm = đang nợ · Mặc định ×1000 · Bấm ÷k nếu muốn nhập số lẻ</p>
     </div>
     <div class="fl g8 mt12">
       <button class="btn bp" onclick="addMember()">Thêm</button>
@@ -563,8 +563,8 @@ tr:hover td{background:var(--surf2)}
     <div class="fg mb12">
       <div><label id="rec-amt-label">Số tiền mỗi người (VND)</label>
         <div style="display:flex;gap:6px;align-items:center">
-          <input type="number" id="rec-amt" placeholder="50000" step="1000" style="flex:1">
-          <button type="button" onclick="applyK('rec-amt')" class="btn by" style="padding:7px 10px;font-size:12px;white-space:nowrap;flex-shrink:0">×k</button>
+          <input type="number" id="rec-amt" placeholder="50 (= 50,000₫)" step="1000" style="flex:1">
+          <button type="button" onclick="applyK('rec-amt')" class="btn by" style="padding:7px 10px;font-size:12px;white-space:nowrap;flex-shrink:0"> ÷k</button>
         </div>
       </div>
       <div>
@@ -678,16 +678,15 @@ function render() {
   renderQMem(); renderRecMemChips();
 }
 function fmt(n) { return (n||0).toLocaleString('vi-VN')+'₫'; }
-// Đọc giá trị input tiền — plain, không auto ×1000
-// Dùng nút ×k cạnh input để nhân 1000 khi cần
+// Mặc định ×1000: mọi input tiền đều được nhân 1000 khi đọc
 function kVal(id) {
-  return parseFloat(document.getElementById(id).value) || 0;
+  return (parseFloat(document.getElementById(id).value) || 0) * 1000;
 }
-// Nhân ×1000 cho input, cập nhật preview nếu cần
+// Bấm ÷k để nhập số lẻ: chia input cho 1000 trước khi lưu
 function applyK(id, cb) {
   const el = document.getElementById(id);
   const v = parseFloat(el.value) || 0;
-  el.value = v * 1000;
+  el.value = v / 1000;
   if (cb) cb();
 }
 
@@ -1028,7 +1027,8 @@ function doTopup(sign) {
 
 function quickTopup() {
   const mid=document.getElementById('q-mem').value;
-  let amt=kVal('q-amt');
+  const raw=parseFloat(document.getElementById('q-amt').value)||0;
+  let amt=raw*1000;
   const nt=document.getElementById('q-note').value.trim();
   const dt=document.getElementById('q-date').value;
   if(!mid||!amt) return toast('Điền đủ thông tin','err');
