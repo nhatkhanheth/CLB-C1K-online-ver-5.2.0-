@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CLB C1K">
@@ -53,6 +53,7 @@ nav a{display:flex;align-items:center;gap:10px;padding:10px 20px;color:var(--mut
   transition:all .15s;border-left:3px solid transparent}
 nav a:hover{color:var(--txt);background:var(--surf2)}
 nav a.active{color:var(--acc);background:var(--acc-d);border-left-color:var(--acc)}
+.tab-icon{font-size:16px;line-height:1}
 nav .sp{flex:1}
 nav .foot{padding:12px 16px;border-top:1px solid var(--bord);font-size:11px;color:var(--mut)}
 main{margin-left:220px;flex:1;padding:28px 32px;padding-top:58px;max-width:1120px}
@@ -162,23 +163,253 @@ tr:hover td{background:var(--surf2)}
 /* PERSON HISTORY */
 .ph-item{background:var(--bg);border:1px solid var(--bord);border-radius:8px;padding:10px 14px;
   margin-bottom:6px;font-size:13px}
-/* MOBILE */
+/* ═══════════════════════════════════════════
+   MOBILE — iPhone native-style
+   ═══════════════════════════════════════════ */
 @media(max-width:768px){
-  nav{width:100%;min-height:auto;position:fixed;top:auto;bottom:0;left:0;right:0;
-    flex-direction:row;padding:0;border-right:none;border-top:1px solid var(--bord);
-    z-index:200;overflow-x:auto}
-  .logo{display:none}.sp{display:none}.foot{display:none}
-  nav a{flex-direction:column;padding:7px 4px 9px;font-size:9.5px;gap:2px;
-    border-left:none;border-top:3px solid transparent;min-width:54px;text-align:center;justify-content:center}
-  nav a.active{border-left:none;border-top-color:var(--acc)}
-  main{margin-left:0;padding:14px;padding-top:56px;padding-bottom:78px;max-width:100%}
-  #abar{left:0;right:0;border-left:none;border-bottom-left-radius:0;justify-content:space-between}
-  .sgrid{grid-template-columns:1fr 1fr;gap:9px}
-  .fg,.fg3{grid-template-columns:1fr}
-  .ph.fb{flex-direction:column;align-items:flex-start;gap:8px}
-  .card{padding:13px}.modal{padding:18px}
-  .hm{display:none}
-  .fg-top{flex-direction:column;gap:8px}
+
+  /* ── Body & scroll lock prevention ── */
+  html, body {
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ── Sidebar → Bottom Tab Bar ── */
+  nav {
+    width: 100%;
+    min-height: auto;
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    flex-direction: row;
+    padding: 0;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    border-right: none;
+    border-top: 1px solid var(--bord);
+    z-index: 200;
+    overflow: hidden;
+    background: rgba(22,25,35,0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .logo { display: none }
+  .sp   { display: none }
+  .foot { display: none }
+
+  /* Each nav tab — big tap targets */
+  nav a {
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 2px 10px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0;
+    gap: 4px;
+    border-left: none;
+    border-top: 2px solid transparent;
+    min-width: 0;
+    min-height: 60px;
+    text-align: center;
+    color: var(--mut);
+    transition: color .15s, background .15s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  nav a .tab-icon {
+    font-size: 22px;
+    line-height: 1;
+    display: block;
+  }
+
+  nav a.active {
+    color: var(--acc);
+    background: var(--acc-d);
+    border-left: none;
+    border-top-color: var(--acc);
+  }
+
+  /* ── Main content ── */
+  main {
+    margin-left: 0;
+    padding: 12px 14px;
+    padding-top: 60px;
+    padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px));
+    max-width: 100%;
+  }
+
+  /* ── Auth bar ── */
+  #abar {
+    left: 0;
+    right: 0;
+    border-left: none;
+    border-bottom-left-radius: 0;
+    justify-content: space-between;
+    padding: 9px 16px;
+    font-size: 13px;
+  }
+
+  /* ── Stats grid ── */
+  .sgrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .stat {
+    padding: 14px 14px;
+    border-radius: 12px;
+  }
+
+  .sv { font-size: 18px; }
+
+  /* ── Forms — bigger inputs ── */
+  .fg, .fg3 { grid-template-columns: 1fr; gap: 14px; }
+
+  input, select, textarea {
+    padding: 13px 14px;
+    font-size: 16px; /* prevents iOS zoom on focus */
+    border-radius: 10px;
+    min-height: 48px;
+  }
+
+  label {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  /* ── Buttons — bigger touch targets ── */
+  .btn {
+    padding: 13px 18px;
+    font-size: 15px;
+    border-radius: 10px;
+    min-height: 48px;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  /* Small utility buttons override */
+  .btn[style*="font-size:11px"],
+  .btn[style*="font-size:12px"] {
+    min-height: 38px;
+    padding: 8px 14px !important;
+    font-size: 13px !important;
+  }
+
+  /* ── Cards ── */
+  .card {
+    padding: 16px;
+    border-radius: 14px;
+    margin-bottom: 14px;
+  }
+
+  /* ── Modal ── */
+  .modal {
+    padding: 22px 18px;
+    border-radius: 20px 20px 0 0;
+    width: 100%;
+    max-width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 90vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Center overlays at bottom on mobile */
+  .ov {
+    align-items: flex-end;
+  }
+
+  /* ── Page headers ── */
+  .ph.fb { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .ph h1 { font-size: 22px; }
+  .ph p  { font-size: 13px; }
+
+  /* ── Table horizontal scroll ── */
+  .card > table,
+  #tbl-history table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  th { font-size: 10px; padding: 8px 10px; }
+  td { font-size: 13px; padding: 11px 10px; }
+
+  .hm { display: none }
+  .fg-top { flex-direction: column; gap: 8px; }
+
+  /* ── Chips (member selector) ── */
+  .chip {
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 22px;
+    min-height: 42px;
+  }
+
+  /* ── Quick tags ── */
+  .qtag {
+    padding: 9px 16px;
+    font-size: 14px;
+    border-radius: 18px;
+    min-height: 40px;
+  }
+
+  /* ── Sub-tabs ── */
+  .tabs { gap: 0; border-bottom: 1px solid var(--bord); }
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 12px 8px;
+    font-size: 14px;
+    min-height: 46px;
+  }
+
+  /* ── Toast ── */
+  #toast {
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    right: 14px;
+    left: 14px;
+    max-width: none;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  /* ── Filter bar (history) ── */
+  #page-history .fl.g8 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  #page-history .fl.g8 select {
+    width: 100%;
+  }
+
+  /* ── Payment info QR area ── */
+  .card img[alt="QR Vietcombank"] {
+    width: 120px;
+    height: 120px;
+  }
+
+  /* ── Split mode buttons ── */
+  #page-record .fl.g8.mt8 {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #page-record .fl.g8.mt8 .btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 </style>
 </head>
@@ -194,12 +425,12 @@ tr:hover td{background:var(--surf2)}
 <div class="shell">
 <nav>
   <div class="logo"><div class="logo-t">💰 CLB C1K</div><div class="logo-s">Quản lý chi tiêu tập thể</div></div>
-  <a onclick="go('dash')" class="active" id="nav-dash">📊 Tổng quan</a>
-  <a onclick="go('members')" id="nav-members">👥 Thành viên</a>
-  <a onclick="go('record')" id="nav-record">✏️ Ghi chi tiêu</a>
-  <a onclick="go('recurring')" id="nav-recurring">🔁 Chi phí định kỳ</a>
-  <a onclick="go('history')" id="nav-history">📋 Lịch sử</a>
-  <a onclick="go('export')" id="nav-export">📤 Xuất & Share</a>
+  <a onclick="go('dash')" class="active" id="nav-dash"><span class="tab-icon">📊</span>Tổng quan</a>
+  <a onclick="go('members')" id="nav-members"><span class="tab-icon">👥</span>Thành viên</a>
+  <a onclick="go('record')" id="nav-record"><span class="tab-icon">✏️</span>Ghi tiêu</a>
+  <a onclick="go('recurring')" id="nav-recurring"><span class="tab-icon">🔁</span>Định kỳ</a>
+  <a onclick="go('history')" id="nav-history"><span class="tab-icon">📋</span>Lịch sử</a>
+  <a onclick="go('export')" id="nav-export"><span class="tab-icon">📤</span>Xuất</a>
   <div class="sp"></div>
   <div class="foot" id="sync-nav">Firebase</div>
 </nav>
