@@ -1705,8 +1705,10 @@ async function requestNotifPermission() {
     if (permission === 'granted') {
       await initFCM();
       toast('🔔 Đã bật thông báo!');
-      document.getElementById('notif-btn-row').style.display = 'none';
       localStorage.setItem('notif_enabled', '1');
+      // Ẩn cả banner lẫn nút sau khi bật thành công
+      document.getElementById('notif-btn-row').style.display = 'none';
+      document.getElementById('ios-banner').style.display = 'none';
     } else {
       toast('❌ Bạn đã từ chối thông báo', 'err');
     }
@@ -1800,24 +1802,30 @@ if ('serviceWorker' in navigator) {
 (function() {
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   const isSafari = /safari/i.test(navigator.userAgent) && !/crios|fxios|opios/i.test(navigator.userAgent);
-  const isStandalone = window.navigator.standalone === true;
+  const isStandalone = window.navigator.standalone === true
+    || window.matchMedia('(display-mode: standalone)').matches;
   const dismissed = localStorage.getItem('pwa_banner_dismissed');
-  
-  if (isIOS && isSafari && !isStandalone && !dismissed) {
-    // Show after 2 seconds
-    setTimeout(() => {
-      document.getElementById('ios-banner').style.display = 'block';
-    }, 2000);
-  }
-  
-  // Show notif button if installed as PWA and not yet enabled
-  if (isStandalone && Notification.permission !== 'granted') {
-    document.getElementById('notif-btn-row').style.display = 'block';
-    document.getElementById('ios-banner').style.display = 'block';
+  const notifEnabled = localStorage.getItem('notif_enabled');
+
+  const banner = document.getElementById('ios-banner');
+  const notifRow = document.getElementById('notif-btn-row');
+
+  if (isStandalone) {
+    // Đã cài app rồi — chỉ hiện nút bật noti nếu chưa bật
+    if (Notification.permission !== 'granted' && !notifEnabled) {
+      notifRow.style.display = 'block';
+      banner.style.display = 'block';
+    }
+    // Nếu đã bật noti rồi → ẩn hoàn toàn
+  } else if (isIOS && isSafari && !dismissed) {
+    // Chưa cài app → hướng dẫn cài
+    notifRow.style.display = 'none';
+    setTimeout(() => { banner.style.display = 'block'; }, 2000);
   }
 
-  // Remember dismiss for 7 days
-  document.getElementById('ios-banner').querySelector('button').addEventListener('click', () => {
+  // Dismiss button
+  banner.querySelector('button').addEventListener('click', () => {
+    banner.style.display = 'none';
     localStorage.setItem('pwa_banner_dismissed', Date.now() + 7*24*60*60*1000);
   });
 })();
