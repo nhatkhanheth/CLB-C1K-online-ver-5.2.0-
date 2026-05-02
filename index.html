@@ -208,14 +208,13 @@ tr:hover td{background:var(--surf2)}
 <!-- ── DASHBOARD ─────────────────────────────────────────────────────── -->
 <div class="page active" id="page-dash">
   <div class="ph fb">
-    <div><h1>Tổng quan</h1><p>Trạng thái quỹ và công nợ</p></div>
-    <span class="tm">Dùng ▲▼ để sắp xếp thứ tự</span>
+    <div><h1>Tổng quan</h1><p>Trạng thái quỹ và công nợ — sắp xếp tự động theo số dư</p></div>
   </div>
   <div class="sgrid" id="stat-grid"></div>
   <div class="card">
     <div class="sec">Công nợ thành viên</div>
     <table id="tbl-balance-wrap">
-      <thead><tr><th style="width:64px"></th><th>Thành viên</th><th>Số dư</th><th>Trạng thái</th></tr></thead>
+      <thead><tr><th>Thành viên</th><th>Số dư</th><th>Trạng thái</th></tr></thead>
       <tbody id="tbl-balance"></tbody>
     </table>
   </div>
@@ -691,16 +690,12 @@ function renderDash() {
   document.getElementById('tbl-balance').innerHTML = sorted.length
     ? sorted.map((m,i)=>{
         return `<tr>
-          <td style="width:64px;white-space:nowrap">
-            <button onclick="moveOrder('${m.id}',-1)" style="background:none;border:1px solid var(--bord);border-radius:4px;color:var(--mut);cursor:pointer;padding:1px 6px;font-size:12px" title="Lên">▲</button>
-            <button onclick="moveOrder('${m.id}',1)" style="background:none;border:1px solid var(--bord);border-radius:4px;color:var(--mut);cursor:pointer;padding:1px 6px;font-size:12px" title="Xuống">▼</button>
-          </td>
           <td><b>${m.name}</b></td>
           <td class="${m.balance>0?'ap':m.balance<0?'an':'az'}">${fmt(m.balance)}</td>
           <td>${m.balance>0?'<span class="bdg dg">Đủ tiền</span>':m.balance<0?'<span class="bdg dr">Đang nợ</span>':'<span class="bdg dy">Hòa vốn</span>'}</td>
         </tr>`;
       }).join('')
-    : '<tr><td colspan="4" class="empty">Chưa có thành viên</td></tr>';
+    : '<tr><td colspan="3" class="empty">Chưa có thành viên</td></tr>';
   initDrag();
 
   const rec=[...S.transactions].reverse().slice(0,5);
@@ -1157,26 +1152,29 @@ function switchRecTab(t) {
   if(t==='quick'){document.getElementById('q-date').value=td();renderQMem();}
 }
 
-// ─── REORDER (up/down buttons) ───────────────────────────────────────────────
-function moveOrder(id, dir) {
-  const sorted = getSortedMembers();
-  const idx = sorted.findIndex(m => m.id === id);
-  const newIdx = idx + dir;
-  if (newIdx < 0 || newIdx >= sorted.length) return;
-  // swap order values
-  const tmp = sorted[idx].order;
-  sorted[idx].order = sorted[newIdx].order;
-  sorted[newIdx].order = tmp;
-  fbSave(); renderDash(); renderMembersList();
-}
-let dragId=null;
-function initDrag() { /* replaced by moveOrder buttons */ }
+// ─── REORDER (auto by balance) ───────────────────────────────────────────────
+function initDrag() { /* auto-sorted by balance */ }
 function dragStart(e) {}
 function dragOver(e) { e.preventDefault(); }
 function dragLeave(e) {}
 function dragDrop(e) { e.preventDefault(); }
 function getSortedMembers() {
-  return [...S.members].sort((a,b)=>(a.order??99)-(b.order??99));
+  const fund = S.members.filter(m => m.id === FUND_ID);
+  const rest = S.members.filter(m => m.id !== FUND_ID).sort((a, b) => {
+    const ab = a.balance || 0, bb = b.balance || 0;
+    // zero goes to bottom
+    if (ab === 0 && bb !== 0) return 1;
+    if (bb === 0 && ab !== 0) return -1;
+    if (ab === 0 && bb === 0) return 0;
+    // negatives first (most negative = smallest number = first)
+    if (ab < 0 && bb >= 0) return -1;
+    if (bb < 0 && ab >= 0) return 1;
+    // both negative: more negative first
+    if (ab < 0 && bb < 0) return ab - bb;
+    // both positive: larger positive first
+    return bb - ab;
+  });
+  return [...fund, ...rest];
 }
 
 // ─── SHARE / EXPORT ──────────────────────────────────────────────────────────
