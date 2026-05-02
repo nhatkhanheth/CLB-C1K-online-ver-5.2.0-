@@ -271,7 +271,12 @@ tr:hover td{background:var(--surf2)}
     <div class="sec">Nạp / Trả tiền</div>
     <div class="fg mb12">
       <div><label>Thành viên</label><select id="topup-mem"></select></div>
-      <div><label>Số tiền (nghìn ₫) — âm để trừ</label><input type="number" id="topup-amt" placeholder="100 = 100,000₫" step="1"></div>
+      <div><label>Số tiền (VND) — âm để trừ</label>
+        <div style="display:flex;gap:6px;align-items:center">
+          <input type="number" id="topup-amt" placeholder="500000" step="1000" style="flex:1">
+          <button type="button" onclick="applyK('topup-amt')" class="btn by" style="padding:7px 10px;font-size:12px;white-space:nowrap;flex-shrink:0">×k</button>
+        </div>
+      </div>
     </div>
     <div class="mb12"><label>Ghi chú</label><input type="text" id="topup-note" placeholder="Nạp tiền tháng 6..."></div>
     <div class="fl g8">
@@ -328,8 +333,11 @@ tr:hover td{background:var(--surf2)}
       </div>
 
       <div class="fg mb12" id="amt-row">
-        <div><label id="amt-label">Tổng tiền (nghìn ₫)</label>
-          <input type="number" id="sess-amt" placeholder="500 = 500,000₫" step="1" oninput="calcPP()">
+        <div><label id="amt-label">Tổng tiền (VND)</label>
+          <div style="display:flex;gap:6px;align-items:center">
+            <input type="number" id="sess-amt" placeholder="500000" step="1000" oninput="calcPP()" style="flex:1">
+            <button type="button" onclick="applyK('sess-amt',calcPP)" class="btn by" style="padding:7px 10px;font-size:12px;white-space:nowrap;flex-shrink:0">×k</button>
+          </div>
         </div>
         <div id="pp-display" style="display:none">
           <label>Mỗi người trả</label>
@@ -370,7 +378,12 @@ tr:hover td{background:var(--surf2)}
     <div class="card">
       <div class="fg mb12">
         <div><label>Thành viên</label><select id="q-mem"></select></div>
-        <div><label>Số tiền (nghìn ₫) — nhập âm để trừ</label><input type="number" id="q-amt" placeholder="100 = 100,000₫" step="1"></div>
+        <div><label>Số tiền (VND) — âm để trừ</label>
+          <div style="display:flex;gap:6px;align-items:center">
+            <input type="number" id="q-amt" placeholder="500000" step="1000" style="flex:1">
+            <button type="button" onclick="applyK('q-amt')" class="btn by" style="padding:7px 10px;font-size:12px;white-space:nowrap;flex-shrink:0">×k</button>
+          </div>
+        </div>
       </div>
       <div class="fg mb12">
         <div><label>Ngày</label><input type="date" id="q-date"></div>
@@ -492,9 +505,12 @@ tr:hover td{background:var(--surf2)}
     <div class="mt">Thêm thành viên</div>
     <div class="mb12"><label>Tên</label><input type="text" id="mem-name" placeholder="Nguyễn Văn A"></div>
     <div class="mb12">
-      <label>Số dư ban đầu (nghìn ₫)</label>
-      <input type="number" id="mem-bal" placeholder="0" value="0">
-      <p class="tm mt8">Dương = có tiền · Âm = đang nợ · VD: 200 = 200,000₫</p>
+      <label>Số dư ban đầu (VND)</label>
+      <div style="display:flex;gap:6px;align-items:center">
+        <input type="number" id="mem-bal" placeholder="0" value="0" style="flex:1">
+        <button type="button" onclick="applyK('mem-bal')" class="btn by" style="padding:7px 10px;font-size:12px;white-space:nowrap;flex-shrink:0">×k</button>
+      </div>
+      <p class="tm mt8">Dương = có tiền · Âm = đang nợ · Bấm ×k để nhân 1000</p>
     </div>
     <div class="fl g8 mt12">
       <button class="btn bp" onclick="addMember()">Thêm</button>
@@ -545,8 +561,11 @@ tr:hover td{background:var(--surf2)}
       <input type="hidden" id="rec-mode" value="fixed">
     </div>
     <div class="fg mb12">
-      <div><label id="rec-amt-label">Số tiền mỗi người (nghìn ₫)</label>
-        <input type="number" id="rec-amt" placeholder="50 = 50,000₫" step="1">
+      <div><label id="rec-amt-label">Số tiền mỗi người (VND)</label>
+        <div style="display:flex;gap:6px;align-items:center">
+          <input type="number" id="rec-amt" placeholder="50000" step="1000" style="flex:1">
+          <button type="button" onclick="applyK('rec-amt')" class="btn by" style="padding:7px 10px;font-size:12px;white-space:nowrap;flex-shrink:0">×k</button>
+        </div>
       </div>
       <div>
         <label>Nhóm mặc định tham gia</label>
@@ -659,8 +678,18 @@ function render() {
   renderQMem(); renderRecMemChips();
 }
 function fmt(n) { return (n||0).toLocaleString('vi-VN')+'₫'; }
-// ×1000 helper: stored values are actual VND, inputs are in thousands
-function kVal(id) { return (parseFloat(document.getElementById(id).value)||0)*1000; }
+// Đọc giá trị input tiền — plain, không auto ×1000
+// Dùng nút ×k cạnh input để nhân 1000 khi cần
+function kVal(id) {
+  return parseFloat(document.getElementById(id).value) || 0;
+}
+// Nhân ×1000 cho input, cập nhật preview nếu cần
+function applyK(id, cb) {
+  const el = document.getElementById(id);
+  const v = parseFloat(el.value) || 0;
+  el.value = v * 1000;
+  if (cb) cb();
+}
 
 const FUND_ID = '__fund_team__';
 function ensureFundMember() {
@@ -778,9 +807,9 @@ function setSplitMode(m) {
   ['split','fixed','fund'].forEach(x=>document.getElementById('mode-'+x).className='btn bg');
   document.getElementById('mode-'+m).className='btn bp';
   const al=document.getElementById('amt-label');
-  if(m==='split') al.textContent='Tổng tiền (nghìn ₫)';
-  else if(m==='fixed') al.textContent='Số tiền mỗi người (nghìn ₫)';
-  else al.textContent='Tổng tiền bạn đã chi (nghìn ₫)';
+  if(m==='split') al.textContent='Tổng tiền (VND)';
+  else if(m==='fixed') al.textContent='Số tiền mỗi người (VND)';
+  else al.textContent='Tổng tiền bạn đã chi (VND)';
   document.getElementById('paid-by-row').style.display=m==='fund'?'block':'none';
   calcPP();
 }
@@ -1000,9 +1029,6 @@ function doTopup(sign) {
 function quickTopup() {
   const mid=document.getElementById('q-mem').value;
   let amt=kVal('q-amt');
-  const rawInput=parseFloat(document.getElementById('q-amt').value)||0;
-  // restore sign: kVal gives absolute, we need sign from raw input
-  amt=(rawInput<0?-1:1)*Math.abs(amt);
   const nt=document.getElementById('q-note').value.trim();
   const dt=document.getElementById('q-date').value;
   if(!mid||!amt) return toast('Điền đủ thông tin','err');
@@ -1117,7 +1143,7 @@ function setRecMode(m) {
   recMode=m; document.getElementById('rec-mode').value=m;
   document.getElementById('rm-split').className=m==='split'?'btn bp':'btn bg';
   document.getElementById('rm-fixed').className=m==='fixed'?'btn bp':'btn bg';
-  document.getElementById('rec-amt-label').textContent=m==='fixed'?'Số tiền mỗi người (nghìn ₫)':'Tổng tiền (nghìn ₫)';
+  document.getElementById('rec-amt-label').textContent=m==='fixed'?'Số tiền mỗi người (VND)':'Tổng tiền (VND)';
 }
 function saveRec() {
   const name=document.getElementById('rec-name').value.trim();
