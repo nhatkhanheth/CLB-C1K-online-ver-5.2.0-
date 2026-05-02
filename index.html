@@ -19,6 +19,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
   const cfg = {
     apiKey:"AIzaSyDBIV4zaXogNGNunaK9c8wrRk9S9kVYVY0",
     authDomain:"clb-c1k.firebaseapp.com",
@@ -30,9 +31,33 @@
   };
   const db = getDatabase(initializeApp(cfg));
   window._fbSet      = d  => set(ref(db,'clb_c1k'), d);
+  window._fbSetToken = (safe, raw) => set(ref(db,'clb_c1k_tokens/'+safe), raw);
   window._fbSetPw    = h  => set(ref(db,'clb_c1k_pw'), {h});
   window._fbListen   = cb => onValue(ref(db,'clb_c1k'),    s=>cb(s.val()));
   window._fbListenPw = cb => onValue(ref(db,'clb_c1k_pw'), s=>cb(s.val()));
+  // Init FCM Messaging
+  const messaging = getMessaging(initializeApp(cfg));
+  window._messaging = messaging;
+  window._vapidKey = "BHFtMtk2-MVKGTFHdUdSX7cTrUtzLcLO6H7K6IcjR3YECHG7Q8piO8NAafbhwLqA1d5bR17aaN1lJFHD3LDqnr4";
+  
+  // Handle foreground messages (app is open)
+  onMessage(messaging, (payload) => {
+    const title = payload.notification?.title || 'CLB C1K';
+    const body  = payload.notification?.body  || '';
+    // Show as in-app toast
+    const t = document.getElementById('toast');
+    if (t) {
+      t.textContent = body;
+      t.className = 'show ok';
+      clearTimeout(t._t);
+      t._t = setTimeout(() => t.className = '', 5000);
+    }
+    // Also try native notification if permitted
+    if (Notification.permission === 'granted') {
+      new Notification(title, { body, icon: './icon-192.png' });
+    }
+  });
+
   document.dispatchEvent(new Event('firebase-ready'));
 </script>
 <style>
@@ -1612,6 +1637,95 @@ document.addEventListener('firebase-ready', startFB);
 if(window._fbListen) startFB();
 </script>
 
+<!-- FCM Service Worker (must be at root scope) -->
+<script>
+// ── FCM Setup ──────────────────────────────────────────────────────────────
+async function initFCM() {
+  try {
+    if (!window._messaging) return;
+    
+    // Register FCM-compatible service worker
+    const swCode = `
+importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js');
+firebase.initializeApp({
+  apiKey:"AIzaSyDBIV4zaXogNGNunaK9c8wrRk9S9kVYVY0",
+  authDomain:"clb-c1k.firebaseapp.com",
+  databaseURL:"https://clb-c1k-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:"clb-c1k",
+  storageBucket:"clb-c1k.firebasestorage.app",
+  messagingSenderId:"553963981005",
+  appId:"1:553963981005:web:5297ab8a0ad029a75c8184"
+});
+const messaging = firebase.messaging();
+messaging.onBackgroundMessage(payload => {
+  self.registration.showNotification(
+    payload.notification?.title || 'CLB C1K',
+    {
+      body: payload.notification?.body || '',
+      icon: 'https://nhatkhanheth.github.io/CLB-C1K-online-ver-5.2.0-/icon-192.png',
+      badge: 'https://nhatkhanheth.github.io/CLB-C1K-online-ver-5.2.0-/icon-192.png',
+      vibrate: [200, 100, 200],
+      data: { url: 'https://nhatkhanheth.github.io/CLB-C1K-online-ver-5.2.0-/' }
+    }
+  );
+});
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  e.waitUntil(clients.openWindow(e.notification.data?.url || 'https://nhatkhanheth.github.io/CLB-C1K-online-ver-5.2.0-/'));
+});
+    `;
+    
+    const swBlob = new Blob([swCode], {type: 'application/javascript'});
+    const swUrl  = URL.createObjectURL(swBlob);
+    const reg    = await navigator.serviceWorker.register(swUrl, {scope: './'});
+    await navigator.serviceWorker.ready;
+    
+    // Get FCM token
+    const token = await getToken(window._messaging, {
+      vapidKey: window._vapidKey,
+      serviceWorkerRegistration: reg
+    });
+    
+    if (token) {
+      // Save token to Firebase DB so Cloud Function can send to it
+      const safeToken = token.replace(/[.#$\[\]]/g, '_');
+      window._fbSet && window._fbSetToken && window._fbSetToken(safeToken, token);
+      console.log('FCM token saved:', token.slice(0,20) + '...');
+    }
+  } catch(e) {
+    console.warn('FCM init error:', e);
+  }
+}
+
+// ── Request notification permission ────────────────────────────────────────
+async function requestNotifPermission() {
+  try {
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      await initFCM();
+      toast('🔔 Đã bật thông báo!');
+      document.getElementById('notif-btn-row').style.display = 'none';
+      localStorage.setItem('notif_enabled', '1');
+    } else {
+      toast('❌ Bạn đã từ chối thông báo', 'err');
+    }
+  } catch(e) {
+    console.warn('Permission error:', e);
+  }
+}
+
+// Auto-init if already granted
+window.addEventListener('load', async () => {
+  if (Notification.permission === 'granted' && !localStorage.getItem('notif_enabled')) {
+    await initFCM();
+    localStorage.setItem('notif_enabled', '1');
+  } else if (Notification.permission === 'granted') {
+    await initFCM();
+  }
+});
+</script>
+
 <!-- PWA: Manifest injection (inline, no server needed) -->
 <script>
 (function() {
@@ -1671,6 +1785,14 @@ if ('serviceWorker' in navigator) {
     <span style="font-size:12px;font-weight:600;color:#4ade80">Thêm vào màn hình chính</span>
     <span style="font-size:14px">➕</span>
   </div>
+  <!-- Notification enable button (shown after install) -->
+  <div id="notif-btn-row" style="margin-top:8px;display:none">
+    <button onclick="requestNotifPermission()" style="width:100%;padding:10px;border-radius:8px;
+      background:rgba(96,165,250,.15);border:1px solid rgba(96,165,250,.3);color:#60a5fa;
+      font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">
+      🔔 Bật thông báo giao dịch
+    </button>
+  </div>
 </div>
 
 <script>
@@ -1688,6 +1810,12 @@ if ('serviceWorker' in navigator) {
     }, 2000);
   }
   
+  // Show notif button if installed as PWA and not yet enabled
+  if (isStandalone && Notification.permission !== 'granted') {
+    document.getElementById('notif-btn-row').style.display = 'block';
+    document.getElementById('ios-banner').style.display = 'block';
+  }
+
   // Remember dismiss for 7 days
   document.getElementById('ios-banner').querySelector('button').addEventListener('click', () => {
     localStorage.setItem('pwa_banner_dismissed', Date.now() + 7*24*60*60*1000);
