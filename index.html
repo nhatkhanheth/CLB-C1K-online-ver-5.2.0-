@@ -114,12 +114,13 @@ main{margin-left:230px;flex:1;padding:28px 32px;padding-top:58px;max-width:1120p
 .sv{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:600;margin-top:5px}
 .pos{color:var(--acc)}.neg{color:var(--red)}
 /* FORM */
-.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px;min-width:0}.fg>*{min-width:0;overflow:hidden}
 .fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
 label{display:block;font-size:12px;color:var(--mut);margin-bottom:4px;font-weight:500}
-input,select,textarea{width:100%;background:var(--bg);border:1px solid var(--bord);
+input,select,textarea{width:100%;box-sizing:border-box;background:var(--bg);border:1px solid var(--bord);
   border-radius:7px;padding:8px 11px;color:var(--txt);font-size:13px;font-family:inherit;outline:none;transition:border-color .15s}
 input:focus,select:focus{border-color:var(--acc)}
+input[type="date"]{-webkit-appearance:none;appearance:none;width:100%;box-sizing:border-box;padding:8px 10px;font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis}
 select option{background:var(--surf2)}
 .btn{padding:8px 16px;border-radius:7px;border:none;font-size:13px;font-weight:600;
   cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
@@ -323,6 +324,17 @@ tr:hover td{background:var(--surf2)}
     font-size: 16px; /* prevents iOS zoom on focus */
     border-radius: 10px;
     min-height: 48px;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  input[type="date"] {
+    padding: 13px 10px;
+    font-size: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
+    overflow: hidden;
   }
 
   label {
