@@ -9,7 +9,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CLB C1K">
 <meta name="theme-color" content="#0a0a0b">
-<link rel="apple-touch-icon" id="apple-icon">
+<link rel="apple-touch-icon" href="./logo.png">
+<link rel="icon" href="./logo.png">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -35,7 +36,7 @@
   document.dispatchEvent(new Event('firebase-ready'));
 </script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root{
   --bg:#0a0a0b; --bg-2:#0f0f11;
@@ -45,7 +46,6 @@
   --grn:#22c55e; --grn-2:#16a34a; --grn-d:rgba(34,197,94,.10);
   --red:#ef4444; --red-2:#dc2626; --red-d:rgba(239,68,68,.10);
   --yel:#eab308; --yel-d:rgba(234,179,8,.10);
-  --blu:#3b82f6; --blu-d:rgba(59,130,246,.10);
   --pur:#a855f7; --pur-d:rgba(168,85,247,.10);
   --txt:#fafafa; --txt-2:#d4d4d8; --txt-3:#a1a1aa; --mut:#71717a;
   --r-sm:8px; --r:10px; --r-lg:14px; --r-xl:18px;
@@ -61,18 +61,15 @@ body{
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
 }
 
-/* ─── C1K LOGO (SVG, reusable) ─── */
-.c1k-logo{display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--acc),var(--acc-2));border-radius:14px;position:relative;box-shadow:0 8px 24px var(--acc-glow);overflow:hidden}
-.c1k-logo::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.18),transparent 50%);pointer-events:none}
-.c1k-logo svg{width:60%;height:60%;color:#fff;stroke-width:2.2;position:absolute;top:18%;left:50%;transform:translateX(-50%);opacity:.18}
-.c1k-logo .c1k-text{font-family:'Inter',sans-serif;font-weight:900;color:#fff;letter-spacing:-.02em;position:relative;z-index:2;text-shadow:0 1px 3px rgba(0,0,0,.3)}
+/* ─── C1K LOGO (image) ─── */
+.c1k-logo{display:inline-flex;align-items:center;justify-content:center;background:#000;border-radius:12px;position:relative;overflow:hidden;box-shadow:0 6px 20px rgba(247,147,26,.20),0 0 0 1px rgba(247,147,26,.15)}
+.c1k-logo img{width:100%;height:100%;object-fit:cover;display:block}
 
 /* ─── SPLASH ─── */
 #splash{position:fixed;inset:0;background:var(--bg);z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;transition:opacity .4s var(--ease)}
 #splash.hide{opacity:0;pointer-events:none}
-#splash .c1k-logo{width:64px;height:64px;animation:splashPulse 1.5s var(--ease) infinite}
-#splash .c1k-logo .c1k-text{font-size:18px}
-.splash-name{font-size:15px;font-weight:600;letter-spacing:.02em;color:var(--txt);opacity:0;animation:splashFade .5s var(--ease) .2s forwards}
+#splash .c1k-logo{width:80px;height:80px;border-radius:18px;animation:splashPulse 1.5s var(--ease) infinite}
+.splash-name{font-size:16px;font-weight:700;letter-spacing:.02em;color:var(--txt);opacity:0;animation:splashFade .5s var(--ease) .2s forwards}
 .splash-sub{font-size:11px;color:var(--mut);margin-top:-14px;opacity:0;animation:splashFade .5s var(--ease) .35s forwards}
 .splash-bar{width:120px;height:2px;background:var(--surf-2);border-radius:2px;overflow:hidden;margin-top:6px}
 .splash-bar::after{content:'';display:block;width:30%;height:100%;background:linear-gradient(90deg,transparent,var(--acc),transparent);animation:splashLoad 1s linear infinite}
@@ -80,15 +77,14 @@ body{
 @keyframes splashFade{to{opacity:1}}
 @keyframes splashLoad{0%{transform:translateX(-100%)}100%{transform:translateX(500%)}}
 
-/* ─── LOGIN SCREEN (full page) ─── */
-#login-screen{position:fixed;inset:0;background:var(--bg);z-index:9000;display:none;align-items:center;justify-content:center;padding:20px;background-image:radial-gradient(ellipse at top,rgba(247,147,26,.06),transparent 50%),radial-gradient(ellipse at bottom,rgba(34,197,94,.04),transparent 50%)}
+/* ─── LOGIN SCREEN ─── */
+#login-screen{position:fixed;inset:0;background:var(--bg);z-index:9000;display:none;align-items:center;justify-content:center;padding:20px;background-image:radial-gradient(ellipse at top,rgba(247,147,26,.08),transparent 50%),radial-gradient(ellipse at bottom,rgba(247,147,26,.04),transparent 50%)}
 #login-screen.show{display:flex;animation:fadeIn .4s var(--ease)}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .login-card{width:100%;max-width:380px;background:var(--surf);border:1px solid var(--bord-2);border-radius:20px;padding:32px 28px;box-shadow:var(--sh-lg);animation:loginIn .5s var(--ease)}
 @keyframes loginIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
-.login-logo-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:24px}
-.login-logo-wrap .c1k-logo{width:72px;height:72px;margin-bottom:16px}
-.login-logo-wrap .c1k-logo .c1k-text{font-size:22px}
+.login-logo-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:22px}
+.login-logo-wrap .c1k-logo{width:84px;height:84px;border-radius:20px;margin-bottom:16px}
 .login-title{font-size:20px;font-weight:700;color:var(--txt);letter-spacing:-.01em}
 .login-sub{font-size:12.5px;color:var(--mut);margin-top:5px;text-align:center}
 .login-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--bg-2);padding:4px;border-radius:10px;margin-bottom:18px}
@@ -119,8 +115,7 @@ nav.sidebar{
   position:fixed;top:0;left:0;z-index:100;
 }
 .logo{padding:0 18px 18px;border-bottom:1px solid var(--bord);margin-bottom:12px;display:flex;align-items:center;gap:10px}
-.logo .c1k-logo{width:34px;height:34px;border-radius:9px;flex-shrink:0;box-shadow:0 3px 10px var(--acc-glow)}
-.logo .c1k-logo .c1k-text{font-size:11px}
+.logo .c1k-logo{width:36px;height:36px;border-radius:10px;flex-shrink:0}
 .logo-text{flex:1;min-width:0}
 .logo-t{font-size:14px;font-weight:700;color:var(--txt);letter-spacing:-.01em}
 .logo-s{font-size:10px;color:var(--mut);margin-top:1px;letter-spacing:.02em}
@@ -229,8 +224,8 @@ select option{background:var(--surf-2);color:var(--txt)}
 .bd:hover{background:var(--red-2);transform:translateY(-1px)}
 .bg{background:var(--surf-3);color:var(--txt);border:1px solid var(--bord-2)}
 .bg:hover{border-color:var(--bord-3);background:var(--surf-2)}
-.bb{background:var(--blu-d);color:var(--blu);border:1px solid rgba(59,130,246,.3)}
-.bb:hover{background:rgba(59,130,246,.18)}
+.bb{background:var(--acc-d);color:var(--acc);border:1px solid rgba(247,147,26,.3)}
+.bb:hover{background:rgba(247,147,26,.18);transform:translateY(-1px)}
 .by{background:var(--yel-d);color:var(--yel);border:1px solid rgba(234,179,8,.3)}
 .bpu{background:var(--pur-d);color:var(--pur);border:1px solid rgba(168,85,247,.3)}
 .bgrn{background:var(--grn);color:#fff}
@@ -255,11 +250,23 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .dg{background:var(--grn-d);color:var(--grn)}
 .dr{background:var(--red-d);color:var(--red)}
 .dy{background:var(--yel-d);color:var(--yel)}
-.db{background:var(--blu-d);color:var(--blu)}
+.db{background:var(--acc-d);color:var(--acc)}
 .dp{background:var(--pur-d);color:var(--pur)}
 .do{background:var(--acc-d);color:var(--acc)}
-.bdg-debt{background:var(--red-d);color:var(--red);cursor:pointer;border:1px solid rgba(239,68,68,.25);transition:all .2s}
-.bdg-debt:hover{background:rgba(239,68,68,.18);border-color:var(--red)}
+
+/* Trả nợ button — đậm + hover lift */
+.bdg-debt{
+  display:inline-flex;align-items:center;
+  padding:5px 14px;border-radius:6px;
+  background:linear-gradient(135deg,var(--red),var(--red-2));
+  color:#fff;font-size:11px;font-weight:700;letter-spacing:.02em;
+  border:1px solid var(--red);
+  cursor:pointer;
+  box-shadow:0 2px 8px rgba(239,68,68,.3);
+  transition:all .2s var(--ease);
+}
+.bdg-debt:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(239,68,68,.45);background:linear-gradient(135deg,var(--red-2),var(--red))}
+.bdg-debt:active{transform:translateY(0)}
 
 /* ─── CHIPS ─── */
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
@@ -321,7 +328,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .rec-title{font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;flex-wrap:wrap;color:var(--txt)}
 .rec-sub{font-size:11px;color:var(--mut);margin-top:3px}
 
-/* ─── LEADERBOARD (minimal) ─── */
+/* ─── LEADERBOARD ─── */
 .lb-section{margin-bottom:18px}
 .lb-board{background:var(--surf);border:1px solid var(--bord);border-radius:var(--r-lg);overflow:hidden}
 .lb-board-head{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bord)}
@@ -329,31 +336,37 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .lb-board-title .lb-ic{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:var(--surf-2)}
 .lb-board-title .lb-ic svg{width:13px;height:13px}
 .lb-board-sub{font-size:10.5px;color:var(--mut);font-family:'JetBrains Mono',monospace}
-.lb-list{padding:4px}
-.lb-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;transition:background .15s}
+.lb-list{padding:6px}
+.lb-row{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:8px;transition:all .2s var(--ease);border-bottom:1px solid var(--bord)}
+.lb-row:last-child{border-bottom:none}
 .lb-row:hover{background:var(--surf-2)}
-.lb-rank{width:24px;height:24px;border-radius:6px;background:var(--surf-2);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--mut);flex-shrink:0}
-.lb-rank.r1{background:rgba(247,147,26,.15);color:var(--acc)}
-.lb-rank.r2{background:rgba(255,255,255,.08);color:var(--txt-2)}
-.lb-rank.r3{background:rgba(255,255,255,.05);color:var(--txt-3)}
-.lb-name{flex:1;min-width:0;font-size:13px;font-weight:600;color:var(--txt);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lb-val{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;color:var(--txt-2);flex-shrink:0}
-.lb-bar-wrap{padding:0 12px 10px}
-.lb-bar{height:3px;background:var(--surf-2);border-radius:2px;overflow:hidden}
-.lb-bar-fill{height:100%;background:linear-gradient(90deg,var(--acc),var(--acc-2));border-radius:2px;transition:width .8s var(--ease)}
+.lb-row.top3{background:linear-gradient(90deg,rgba(247,147,26,.06),transparent)}
+.lb-row.top3 .lb-name{color:var(--txt);font-weight:700}
+.lb-row.top1{background:linear-gradient(90deg,rgba(247,147,26,.12),rgba(247,147,26,.02))}
+.lb-rank{width:28px;height:28px;border-radius:7px;background:var(--surf-2);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;color:var(--mut);flex-shrink:0}
+.lb-rank.r1{background:linear-gradient(135deg,#f7931a,#ea7f0c);color:#fff;box-shadow:0 2px 10px rgba(247,147,26,.4)}
+.lb-rank.r2{background:rgba(255,255,255,.10);color:var(--txt)}
+.lb-rank.r3{background:rgba(255,255,255,.06);color:var(--txt-2)}
+.lb-name{flex:1;min-width:0;font-size:13px;font-weight:600;color:var(--txt-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-val{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;color:var(--txt);flex-shrink:0}
 
-/* WANTED — refined */
-.doa-board{background:var(--surf);border:1px solid rgba(239,68,68,.25);border-radius:var(--r-lg);overflow:hidden}
-.doa-head{padding:14px 16px;background:linear-gradient(180deg,rgba(239,68,68,.08),transparent);border-bottom:1px solid rgba(239,68,68,.15);display:flex;align-items:center;gap:8px}
-.doa-head .lb-ic{background:var(--red-d);color:var(--red);width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center}
-.doa-head .lb-ic svg{width:14px;height:14px}
-.doa-title{font-size:12.5px;font-weight:700;color:var(--red);letter-spacing:.03em;text-transform:uppercase}
-.doa-sub{font-size:10.5px;color:var(--mut);margin-top:1px}
-.doa-row{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid var(--bord)}
+/* WANTED — vintage vibe */
+.doa-board{background:linear-gradient(180deg,#1a0f0f,#150b0b);border:2px solid rgba(239,68,68,.35);border-radius:var(--r-lg);overflow:hidden;position:relative}
+.doa-board::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(239,68,68,.015) 10px,rgba(239,68,68,.015) 20px);pointer-events:none}
+.doa-head{padding:14px 16px;background:linear-gradient(180deg,var(--red-2),#991b1b);border-bottom:1px solid rgba(239,68,68,.3);display:flex;align-items:center;gap:10px;position:relative}
+.doa-head .lb-ic{background:rgba(0,0,0,.25);color:#fff;width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center}
+.doa-head .lb-ic svg{width:15px;height:15px}
+.doa-title{font-size:13.5px;font-weight:900;color:#fff;letter-spacing:.15em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;text-shadow:1px 1px 0 rgba(0,0,0,.4)}
+.doa-sub{font-size:10.5px;color:rgba(255,255,255,.7);margin-top:2px;font-style:italic}
+.doa-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px dashed rgba(239,68,68,.2);position:relative}
 .doa-row:last-child{border-bottom:none}
-.doa-rank{width:26px;height:26px;border-radius:7px;background:var(--red-d);color:var(--red);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;flex-shrink:0}
-.doa-name{flex:1;min-width:0;font-size:13px;font-weight:600;color:var(--txt)}
-.doa-bounty{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--red);font-size:13px}
+.doa-rank{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--red),var(--red-2));color:#fff;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:900;flex-shrink:0;box-shadow:0 2px 8px rgba(239,68,68,.3)}
+.doa-info{flex:1;min-width:0}
+.doa-name{font-size:14px;font-weight:800;color:#fff;letter-spacing:.02em;text-transform:uppercase}
+.doa-status{font-size:10px;color:var(--mut);font-weight:600;letter-spacing:.06em;margin-top:3px;text-transform:uppercase;font-style:italic}
+.doa-bounty-wrap{text-align:right;flex-shrink:0}
+.doa-bounty-label{font-size:9px;color:var(--yel);font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px}
+.doa-bounty{font-family:'JetBrains Mono',monospace;font-weight:800;color:var(--yel);font-size:14px}
 
 /* ─── MOBILE ─── */
 @media(max-width:768px){
@@ -365,12 +378,12 @@ tr:hover td{background:rgba(255,255,255,.02)}
     border-right:none;border-top:1px solid var(--bord);z-index:200;overflow:visible;
     background:rgba(20,20,22,.94);backdrop-filter:blur(24px) saturate(180%);
     -webkit-backdrop-filter:blur(24px) saturate(180%);
-    height:68px;
+    height:70px;
   }
   .logo,nav.sidebar .sp,nav.sidebar .foot{display:none}
   nav.sidebar a.nav-link{
     flex:1;flex-direction:column;align-items:center;justify-content:center;
-    padding:10px 2px 6px;font-size:10px;font-weight:600;gap:3px;
+    padding:12px 2px 6px;font-size:10px;font-weight:600;gap:3px;
     margin:0;border-radius:0;min-width:0;text-align:center;color:var(--mut);position:relative;
   }
   nav.sidebar a.nav-link.active{background:transparent;color:var(--acc)}
@@ -379,17 +392,17 @@ tr:hover td{background:rgba(255,255,255,.02)}
   nav.sidebar a.nav-link .tab-icon svg{width:20px;height:20px;transition:transform .2s var(--ease)}
   nav.sidebar a.nav-link.active .tab-icon svg{transform:scale(1.1)}
 
-  /* Center "+" button — fix bị cắt */
+  /* Center "+" button — không bị cắt */
   nav.sidebar a#nav-record{position:relative;overflow:visible}
   nav.sidebar a#nav-record .tab-icon{
     background:var(--acc);border-radius:50%;
     width:44px;height:44px;display:flex;align-items:center;justify-content:center;
-    box-shadow:0 4px 16px var(--acc-glow);margin-top:-4px;margin-bottom:2px;border:3px solid var(--bg);
+    box-shadow:0 4px 16px var(--acc-glow);margin-top:-2px;margin-bottom:2px;border:3px solid var(--bg);
   }
   nav.sidebar a#nav-record .tab-icon svg{stroke:#fff;width:22px;height:22px;stroke-width:2.5}
   nav.sidebar a#nav-record{color:var(--acc)!important;font-weight:600!important}
 
-  main{margin-left:0;padding:14px 14px;padding-top:calc(env(safe-area-inset-top,0px) + 72px);padding-bottom:calc(78px + env(safe-area-inset-bottom,0px));max-width:100%}
+  main{margin-left:0;padding:14px 14px;padding-top:calc(env(safe-area-inset-top,0px) + 72px);padding-bottom:calc(84px + env(safe-area-inset-bottom,0px));max-width:100%}
   #abar{left:0;right:0;border-left:none;border-bottom-left-radius:0;border-bottom-right-radius:0;justify-content:space-between;padding:9px 14px;padding-top:calc(env(safe-area-inset-top,0px) + 9px);font-size:12px;min-height:48px;height:auto}
 
   .sgrid{grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px}
@@ -404,7 +417,6 @@ tr:hover td{background:rgba(255,255,255,.02)}
   .card{padding:15px;border-radius:13px;margin-bottom:12px}
   .ph h1{font-size:20px}
 
-  /* Bottom sheet modal */
   .ov{align-items:flex-end}
   .modal{padding:20px 18px 26px;border-radius:20px 20px 0 0;width:100%;max-width:100%;max-height:90vh;transform:translateY(100%)!important}
   .ov.open .modal{transform:translateY(0)!important}
@@ -416,18 +428,21 @@ tr:hover td{background:rgba(255,255,255,.02)}
   .tab{flex:1;text-align:center;padding:11px 6px;font-size:12.5px;justify-content:center;min-height:42px}
   .chip{padding:8px 14px;font-size:13px;min-height:36px}
   .qtag{padding:7px 13px;font-size:13px;min-height:34px}
-  #toast{top:auto;bottom:calc(78px + env(safe-area-inset-bottom,0px));right:12px;left:12px;max-width:none;transform:translateY(120%)}
+  #toast{top:auto;bottom:calc(84px + env(safe-area-inset-bottom,0px));right:12px;left:12px;max-width:none;transform:translateY(120%)}
   #toast.show{transform:translateY(0)}
   table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
   th{font-size:10px;padding:8px 10px}
   td{font-size:12.5px;padding:10px 10px}
 
   .login-card{max-width:100%;padding:26px 22px;border-radius:18px}
-  .login-logo-wrap .c1k-logo{width:64px;height:64px}
-  .login-logo-wrap .c1k-logo .c1k-text{font-size:20px}
+  .login-logo-wrap .c1k-logo{width:76px;height:76px}
   .login-title{font-size:18px}
   .login-input{padding:12px 14px;font-size:15px}
   .login-btn{padding:13px;font-size:14.5px}
+
+  .doa-title{font-size:12.5px;letter-spacing:.1em}
+  .doa-name{font-size:13px}
+  .doa-bounty{font-size:13px}
 }
 </style>
 </head>
@@ -435,23 +450,17 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
 <!-- SPLASH -->
 <div id="splash">
-  <div class="c1k-logo">
-    <i data-lucide="lock"></i>
-    <span class="c1k-text">C1K</span>
-  </div>
+  <div class="c1k-logo"><img src="./logo.png" alt="C1K"></div>
   <div class="splash-name">CLB C1K</div>
   <div class="splash-sub">Quản lý chi tiêu tập thể</div>
   <div class="splash-bar"></div>
 </div>
 
-<!-- LOGIN SCREEN (full page) -->
+<!-- LOGIN SCREEN -->
 <div id="login-screen">
   <div class="login-card">
     <div class="login-logo-wrap">
-      <div class="c1k-logo">
-        <i data-lucide="lock"></i>
-        <span class="c1k-text">C1K</span>
-      </div>
+      <div class="c1k-logo"><img src="./logo.png" alt="C1K"></div>
       <div class="login-title">CLB <span style="color:var(--acc)">C1K</span></div>
       <div class="login-sub">Private workspace — Quản lý chi tiêu</div>
     </div>
@@ -486,16 +495,13 @@ tr:hover td{background:rgba(255,255,255,.02)}
 <div id="abar" style="display:none">
   <span id="sync-dot"><span class="sync-led"></span><span id="sync-txt">Kết nối...</span></span>
   <span id="auth-badge"><i data-lucide="eye"></i> Chỉ xem</span>
-  <button class="btn bg btn-sm" id="btn-auth" onclick="openLoginScreen()"><i data-lucide="lock"></i> Đăng nhập</button>
+  <button class="btn bb btn-sm" id="btn-auth" onclick="openLoginScreen()"><i data-lucide="lock"></i> Đăng nhập</button>
 </div>
 
 <div class="shell" id="main-shell" style="display:none">
 <nav class="sidebar">
   <div class="logo">
-    <div class="c1k-logo">
-      <i data-lucide="lock"></i>
-      <span class="c1k-text">C1K</span>
-    </div>
+    <div class="c1k-logo"><img src="./logo.png" alt="C1K"></div>
     <div class="logo-text"><div class="logo-t">CLB C1K</div><div class="logo-s">Quản lý chi tiêu</div></div>
   </div>
   <a onclick="go('dash')" class="nav-link active" id="nav-dash">
@@ -535,8 +541,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
     </table>
   </div>
 
-  <div class="card mb20" style="border-color:rgba(59,130,246,.18);background:linear-gradient(135deg,rgba(59,130,246,.03),transparent)">
-    <div class="sec" style="color:var(--blu)"><i data-lucide="credit-card"></i> Thông tin thanh toán</div>
+  <div class="card mb20" style="border-color:rgba(247,147,26,.22);background:linear-gradient(135deg,rgba(247,147,26,.04),transparent)">
+    <div class="sec" style="color:var(--acc)"><i data-lucide="credit-card"></i> Thông tin thanh toán</div>
     <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap">
       <div style="flex-shrink:0;text-align:center">
         <div style="background:#fff;border-radius:11px;padding:9px;display:inline-block;box-shadow:0 4px 16px rgba(0,0,0,.4)">
@@ -545,7 +551,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div style="font-size:10px;color:var(--mut);margin-top:5px">Quét bằng app ngân hàng</div>
       </div>
       <div style="flex:1;min-width:220px">
-        <div style="background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.15);border-radius:10px;padding:13px 14px;margin-bottom:10px">
+        <div style="background:rgba(247,147,26,.06);border:1px solid rgba(247,147,26,.18);border-radius:10px;padding:13px 14px;margin-bottom:10px">
           <div style="background:#005c2e;border-radius:4px;padding:2px 8px;font-size:10.5px;font-weight:800;color:#fff;display:inline-block;margin-bottom:9px;letter-spacing:.05em">VIETCOMBANK</div>
           <div style="margin-bottom:7px">
             <div style="font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;font-weight:600">Số tài khoản</div>
@@ -561,7 +567,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         </div>
         <div style="background:var(--red-d);border:1px solid rgba(239,68,68,.18);border-radius:9px;padding:10px 13px;font-size:11.5px;line-height:1.7">
           <div style="display:flex;align-items:flex-start;gap:6px;margin-bottom:5px"><i data-lucide="alert-triangle" style="width:13px;height:13px;color:var(--red);flex-shrink:0;margin-top:1px"></i><span style="color:var(--txt-2)">Nếu số dư <span style="color:var(--red);font-weight:700">âm</span>, ghi nội dung: <span style="color:var(--yel);font-weight:600">tên của bạn</span></span></div>
-          <div style="display:flex;align-items:flex-start;gap:6px"><i data-lucide="pin" style="width:13px;height:13px;color:var(--pur);flex-shrink:0;margin-top:1px"></i><span style="color:var(--pur)">Lãi 10% nợ tháng cũ qua tháng mới (vào quỹ team)</span></div>
+          <div style="display:flex;align-items:flex-start;gap:6px"><i data-lucide="pin" style="width:13px;height:13px;color:var(--acc);flex-shrink:0;margin-top:1px"></i><span style="color:var(--acc)">Lãi 10% nợ tháng cũ qua tháng mới (vào quỹ team)</span></div>
         </div>
       </div>
     </div>
@@ -724,8 +730,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div id="person-summary" style="display:none" class="card mt20"></div>
   </div>
   <div id="export-content" style="display:none">
-    <div class="card mb20" style="border-color:rgba(34,197,94,.2);background:linear-gradient(135deg,rgba(34,197,94,.04),transparent)">
-      <div class="sec" style="color:var(--grn)"><i data-lucide="link"></i> Share link xem (read-only)</div>
+    <div class="card mb20" style="border-color:rgba(247,147,26,.22);background:linear-gradient(135deg,rgba(247,147,26,.04),transparent)">
+      <div class="sec" style="color:var(--acc)"><i data-lucide="link"></i> Share link xem (read-only)</div>
       <p class="tm mb12">Link này ai cũng xem được số dư realtime.</p>
       <button class="btn bp" onclick="copyLink()"><i data-lucide="copy"></i> Copy link</button>
       <div id="link-box" style="display:none" class="mt12">
@@ -868,7 +874,6 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
-<!-- Install Guide -->
 <div class="ov" id="ov-install">
   <div class="modal">
     <div class="sheet-handle"></div>
@@ -881,16 +886,13 @@ tr:hover td{background:rgba(255,255,255,.02)}
 <div id="toast"></div>
 
 <!-- iOS Install Banner -->
-<div id="ios-banner" style="display:none;position:fixed;bottom:calc(82px + env(safe-area-inset-bottom,0px));left:12px;right:12px;background:var(--surf);border:1px solid var(--bord-2);border-radius:14px;padding:13px;box-shadow:var(--sh-lg);z-index:9998">
+<div id="ios-banner" style="display:none;position:fixed;bottom:calc(86px + env(safe-area-inset-bottom,0px));left:12px;right:12px;background:var(--surf);border:1px solid var(--bord-2);border-radius:14px;padding:13px;box-shadow:var(--sh-lg);z-index:9998">
   <button id="ios-banner-close" style="position:absolute;top:9px;right:11px;background:none;border:none;color:var(--mut);font-size:20px;cursor:pointer;line-height:1;padding:0">×</button>
   <div style="display:flex;align-items:center;gap:11px">
-    <div class="c1k-logo" style="width:40px;height:40px;border-radius:10px;flex-shrink:0">
-      <i data-lucide="lock" style="color:#fff"></i>
-      <span class="c1k-text" style="font-size:11px">C1K</span>
-    </div>
+    <div class="c1k-logo" style="width:40px;height:40px;border-radius:10px;flex-shrink:0"><img src="./logo.png" alt="C1K"></div>
     <div style="flex:1;min-width:0">
       <div style="font-size:13.5px;font-weight:700;color:var(--txt)">Cài CLB C1K vào máy</div>
-      <div style="font-size:11.5px;color:var(--mut);margin-top:2px;line-height:1.5">Bấm <i data-lucide="share" style="width:13px;height:13px;display:inline;vertical-align:middle;color:var(--blu)"></i> rồi <span style="color:var(--acc);font-weight:600">"Thêm vào màn hình chính"</span></div>
+      <div style="font-size:11.5px;color:var(--mut);margin-top:2px;line-height:1.5">Bấm <i data-lucide="share" style="width:13px;height:13px;display:inline;vertical-align:middle;color:var(--acc)"></i> rồi <span style="color:var(--acc);font-weight:600">"Thêm vào màn hình chính"</span></div>
     </div>
   </div>
 </div>
@@ -902,11 +904,11 @@ tr:hover td{background:rgba(255,255,255,.02)}
 let S = { members:[], transactions:[], recurring:[] };
 let snapshots = {};
 let isAdmin = false;
-let isViewer = false; // user đã bấm "Xem không cần đăng nhập"
+let isViewer = false;
 let PW1 = btoa('213141@@');
 const PW2 = btoa('999999');
 const SK = 'clb_admin_persistent_v4';
-const VK = 'clb_viewer_continue'; // viewer persistence
+const VK = 'clb_viewer_continue';
 let splitMode = 'split';
 let selCat = '🎾 Tennis';
 let recMode = 'fixed';
@@ -1032,7 +1034,7 @@ function buildSnapshot(ym){
 }
 
 // ═══════════════════════════════════════════════════════════════
-// LOGIN FLOW
+// LOGIN
 // ═══════════════════════════════════════════════════════════════
 function openLoginScreen(){
   document.getElementById('login-screen').classList.add('show');
@@ -1197,7 +1199,6 @@ function debtColor(bal){
   return 'var(--red)';
 }
 
-// ── DASHBOARD ──
 function renderDash(){
   ensureFundMember();
   const fund=S.members.find(m=>m.id===FUND_ID);
@@ -1229,14 +1230,13 @@ function renderDash(){
     animateCount(el,0,tgt,700,n=>fmt(n));
   });
 
-  // Balance table — no avatar, gọn "Trả nợ" không icon
   document.getElementById('tbl-balance').innerHTML=getSortedMembers().length
     ? getSortedMembers().map(m=>{
         const bal=m.balance||0;
         const statusCell=m.isFixed
           ? '<span class="bdg dg">Quỹ</span>'
           : bal<0
-            ? `<span class="bdg bdg-debt wo" onclick="quickPayDash('${m.id}')">Trả nợ</span>`
+            ? `<span class="bdg-debt wo" onclick="quickPayDash('${m.id}')">Trả nợ</span>`
             : bal===0
               ? '<span class="bdg" style="background:rgba(113,113,122,.15);color:var(--mut)">Hòa</span>'
               : '<span class="bdg dg">Đủ tiền</span>';
@@ -1281,13 +1281,12 @@ function typeBadge(t){
   let cls='dr';
   if(cat.includes('Tennis')) cls='dp';
   else if(cat.includes('Ăn')) cls='dy';
-  else if(cat.includes('Cà phê')) cls='db';
+  else if(cat.includes('Cà phê')) cls='do';
   else if(cat.includes('Mua sắm')) cls='dg';
   else if(cat.includes('Khác')) cls='do';
   return `<span class="bdg ${cls}">${escapeHTML(cat)}</span>`;
 }
 
-// ── MEMBERS — no avatar ──
 function renderMembersList(){
   document.getElementById('tbl-members').innerHTML=getSortedMembers().length
     ? getSortedMembers().map(m=>`<tr ${m.isFixed?'style="background:rgba(34,197,94,.03)"':''}>
@@ -1305,7 +1304,6 @@ function renderMembersList(){
 function renderTopupSel(){ const s=document.getElementById('topup-mem');const c=s.value;s.innerHTML=S.members.map(m=>`<option value="${m.id}">${escapeHTML(m.name)}</option>`).join('');if(c)s.value=c; }
 function renderQMem(){ const s=document.getElementById('q-mem');if(!s)return;const c=s.value;s.innerHTML=S.members.map(m=>`<option value="${m.id}">${escapeHTML(m.name)}</option>`).join('');if(c)s.value=c; }
 
-// ── CHIPS — no avatar ──
 function renderChips(){
   const g=document.getElementById('sess-chips'); if(!g) return;
   g.innerHTML=S.members.length
@@ -1408,7 +1406,7 @@ function renderRecMemChips(){
 }
 function toggleRChip(id){ const ck=document.getElementById('rck-'+id);ck.checked=!ck.checked;document.getElementById('rchip-'+id).classList.toggle('on',ck.checked); }
 
-// ── LEADERBOARD — minimal pro ──
+// ── LEADERBOARD ──
 function fillLbMonths(){
   const sel=document.getElementById('lb-month'); if(!sel) return;
   const now=new Date(); const curYm=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
@@ -1432,9 +1430,7 @@ function renderLeaderboard(){
   const el=document.getElementById('lb-content'); if(!el) return;
   if(!spending.length){el.innerHTML='<div class="card"><div class="empty"><i data-lucide="trophy"></i>Chưa có dữ liệu tháng này</div></div>';refreshIcons();return;}
 
-  function makeBoardHTML(title, icon, iconColor, arr, valFn, emptyMsg, showBars){
-    const total = arr.reduce((s,m)=>s+(valFn.raw?valFn.raw(m):0),0);
-    const maxVal = Math.max(...arr.map(m=>valFn.raw?valFn.raw(m):0),1);
+  function makeBoardHTML(title, icon, iconColor, arr, valFn, emptyMsg){
     return `
     <div class="lb-section">
       <div class="lb-board">
@@ -1448,12 +1444,14 @@ function renderLeaderboard(){
         ${arr.length?`
         <div class="lb-list">
           ${arr.slice(0,5).map((m,i)=>{
-            const pct = showBars?Math.round(((valFn.raw?valFn.raw(m):0)/maxVal)*100):0;
+            let rowCls='';
+            if(i===0) rowCls='top3 top1';
+            else if(i<3) rowCls='top3';
             return `
-            <div class="lb-row">
+            <div class="lb-row ${rowCls}">
               <div class="lb-rank ${i<3?'r'+(i+1):''}">${i+1}</div>
               <div class="lb-name">${escapeHTML(m.name)}</div>
-              <div class="lb-val">${valFn.fmt(m)}</div>
+              <div class="lb-val">${valFn(m)}</div>
             </div>`;
           }).join('')}
         </div>`:`<div class="empty" style="padding:30px"><i data-lucide="inbox"></i>${emptyMsg}</div>`}
@@ -1469,26 +1467,32 @@ function renderLeaderboard(){
   }).filter(m=>m.liveBal<0).sort((a,b)=>a.liveBal-b.liveBal).slice(0,5);
 
   el.innerHTML=`
-    ${makeBoardHTML('Top Chi tiêu', 'flame', 'var(--acc)', bySpent, {raw:m=>m.spent, fmt:m=>fmt(m.spent)}, 'Chưa ai chi tiêu', true)}
-    ${makeBoardHTML('Top Tham gia', 'target', 'var(--blu)', byCount, {raw:m=>m.count, fmt:m=>m.count+' buổi'}, 'Chưa ai tham gia', true)}
+    ${makeBoardHTML('Top Chi tiêu', 'flame', 'var(--acc)', bySpent, m=>fmt(m.spent), 'Chưa ai chi tiêu')}
+    ${makeBoardHTML('Top Tham gia', 'target', 'var(--acc)', byCount, m=>m.count+' buổi', 'Chưa ai tham gia')}
 
     <div class="lb-section">
       <div class="doa-board">
         <div class="doa-head">
-          <div class="lb-ic"><i data-lucide="alert-octagon"></i></div>
+          <div class="lb-ic"><i data-lucide="skull"></i></div>
           <div>
-            <div class="doa-title">Wanted — đang nợ</div>
-            <div class="doa-sub">${fmtMonth(ym)} · Theo số dư hiện tại</div>
+            <div class="doa-title">☠ Wanted — Dead or Alive ☠</div>
+            <div class="doa-sub">${fmtMonth(ym)} · đang bỏ trốn khỏi quỹ</div>
           </div>
         </div>
         ${byDebt.length
           ? byDebt.map((m,i)=>`
             <div class="doa-row">
               <div class="doa-rank">${i+1}</div>
-              <div class="doa-name">${escapeHTML(m.name)}</div>
-              <div class="doa-bounty">${fmt(Math.abs(m.liveBal))}</div>
+              <div class="doa-info">
+                <div class="doa-name">${escapeHTML(m.name)}</div>
+                <div class="doa-status">đang bỏ trốn</div>
+              </div>
+              <div class="doa-bounty-wrap">
+                <div class="doa-bounty-label">Tiền thưởng</div>
+                <div class="doa-bounty">${fmt(Math.abs(m.liveBal))}</div>
+              </div>
             </div>`).join('')
-          : `<div style="padding:20px 16px;display:flex;align-items:center;gap:10px;color:var(--grn);font-size:13px"><i data-lucide="shield-check" style="width:16px;height:16px"></i> Không có ai nợ — sạch sẽ!</div>`}
+          : `<div style="padding:20px 16px;display:flex;align-items:center;gap:10px;color:var(--grn);font-size:13px"><i data-lucide="shield-check" style="width:16px;height:16px"></i> Không có kẻ trốn nợ — sạch sẽ!</div>`}
       </div>
     </div>
   `;
@@ -1771,7 +1775,6 @@ function delRec(id){
   fbSave(); renderRecList(); renderRecPick(); toast('Đã xóa');
 }
 
-// ── EXPORT ──
 function copyLink(){
   const l=location.href.split('?')[0];
   navigator.clipboard.writeText(l).catch(()=>{});
@@ -1842,7 +1845,7 @@ async function shareLeaderboardCard(){
 }
 
 function fireConfetti(){
-  const colors=['#f7931a','#22c55e','#3b82f6','#a855f7','#eab308'];
+  const colors=['#f7931a','#22c55e','#ef4444','#a855f7','#eab308'];
   for(let i=0;i<40;i++){
     const c=document.createElement('div');
     c.style.cssText=`position:fixed;width:7px;height:7px;pointer-events:none;z-index:9000;left:${Math.random()*100}vw;top:-10px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${Math.random()>.5?'50%':'2px'};transform:rotate(${Math.random()*360}deg)`;
@@ -1856,7 +1859,6 @@ function fireConfetti(){
   }
 }
 
-// ── INSTALL GUIDE ──
 function showInstallGuide(){
   const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
   const isAndroid=/android/i.test(navigator.userAgent);
@@ -1865,18 +1867,17 @@ function showInstallGuide(){
     html=`
       <p class="tm mb12">Trên iPhone/iPad (Safari hoặc Chrome):</p>
       <ol style="padding-left:20px;font-size:13px;line-height:2;color:var(--txt-2)">
-        <li>Bấm nút <b style="color:var(--blu)">Chia sẻ</b> <i data-lucide="share" style="width:14px;height:14px;display:inline;vertical-align:middle"></i> ở thanh dưới (Safari) hoặc trên (Chrome)</li>
-        <li>Cuộn xuống và chọn <b style="color:var(--acc)">"Thêm vào màn hình chính"</b></li>
+        <li>Bấm nút <b style="color:var(--acc)">Chia sẻ</b> <i data-lucide="share" style="width:14px;height:14px;display:inline;vertical-align:middle"></i></li>
+        <li>Cuộn xuống chọn <b style="color:var(--acc)">"Thêm vào màn hình chính"</b></li>
         <li>Bấm <b>"Thêm"</b> ở góc trên phải</li>
       </ol>
-      <p class="tm mt12" style="font-size:11px"><i data-lucide="info" style="width:11px;height:11px;display:inline;vertical-align:middle"></i> App sẽ chạy như app native, có icon riêng trên màn hình</p>
     `;
   }else if(isAndroid){
     html=`
       <p class="tm mb12">Trên Android (Chrome):</p>
       <ol style="padding-left:20px;font-size:13px;line-height:2;color:var(--txt-2)">
-        <li>Bấm nút <b>⋮</b> (menu 3 chấm) góc trên phải</li>
-        <li>Chọn <b style="color:var(--acc)">"Thêm vào màn hình chính"</b> hoặc <b>"Cài đặt ứng dụng"</b></li>
+        <li>Bấm nút <b>⋮</b> (menu) góc trên phải</li>
+        <li>Chọn <b style="color:var(--acc)">"Thêm vào màn hình chính"</b></li>
         <li>Xác nhận</li>
       </ol>
     `;
@@ -1884,7 +1885,7 @@ function showInstallGuide(){
     html=`
       <p class="tm mb12">Trên Desktop (Chrome/Edge):</p>
       <ol style="padding-left:20px;font-size:13px;line-height:2;color:var(--txt-2)">
-        <li>Nhìn vào thanh địa chỉ — bấm icon <b>"Cài đặt"</b> bên phải</li>
+        <li>Nhìn thanh địa chỉ — bấm icon <b>"Cài đặt"</b> bên phải</li>
         <li>Hoặc Menu (⋮) → <b style="color:var(--acc)">"Cài CLB C1K..."</b></li>
       </ol>
     `;
@@ -1922,13 +1923,11 @@ document.getElementById('exp-yr').value=new Date().getFullYear();
 
 if(soundOn) document.getElementById('sound-toggle')?.classList.add('on');
 
-// Init render (offline cache)
 setSplitMode('split');
 render();
 refreshIcons();
 syncDot('connecting');
 
-// Login flow on startup
 function initStartup(){
   const adminLogged = localStorage.getItem(SK)==='logged_in';
   const viewerOk    = localStorage.getItem(VK)==='1';
@@ -1951,63 +1950,19 @@ if(window._fbListen) startFB();
 setTimeout(()=>{moveRecTabInd();moveHistTabInd();},150);
 window.addEventListener('resize',()=>{moveRecTabInd();moveHistTabInd();});
 
-// Hide splash + run startup
 setTimeout(()=>{
   const sp=document.getElementById('splash');
   sp.classList.add('hide');
   setTimeout(()=>{ sp.style.display='none'; initStartup(); },500);
 },900);
 
-// ESC closes overlays
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape') document.querySelectorAll('.ov.open').forEach(o=>o.classList.remove('open'));
 });
 
-// ═══════════════════════════════════════════════════════════════
-// PWA — Manifest + Apple Touch Icon + Service Worker
-// ═══════════════════════════════════════════════════════════════
-function makeAppleIconDataURL(){
-  // 192x192 canvas with C1K orange gradient + lock + text
-  const c=document.createElement('canvas');
-  c.width=192; c.height=192;
-  const ctx=c.getContext('2d');
-  // gradient bg
-  const g=ctx.createLinearGradient(0,0,192,192);
-  g.addColorStop(0,'#f7931a');
-  g.addColorStop(1,'#ea7f0c');
-  ctx.fillStyle=g;
-  // rounded rect
-  const r=38;
-  ctx.beginPath();
-  ctx.moveTo(r,0); ctx.lineTo(192-r,0); ctx.quadraticCurveTo(192,0,192,r);
-  ctx.lineTo(192,192-r); ctx.quadraticCurveTo(192,192,192-r,192);
-  ctx.lineTo(r,192); ctx.quadraticCurveTo(0,192,0,192-r);
-  ctx.lineTo(0,r); ctx.quadraticCurveTo(0,0,r,0);
-  ctx.fill();
-  // Lock icon
-  ctx.strokeStyle='rgba(255,255,255,.22)';
-  ctx.lineWidth=10;
-  ctx.lineCap='round';
-  // lock body
-  ctx.beginPath(); ctx.roundRect=ctx.roundRect||function(x,y,w,h,r){this.beginPath();this.moveTo(x+r,y);this.arcTo(x+w,y,x+w,y+h,r);this.arcTo(x+w,y+h,x,y+h,r);this.arcTo(x,y+h,x,y,r);this.arcTo(x,y,x+w,y,r);this.closePath();return this;};
-  ctx.roundRect(58,68,76,60,8); ctx.stroke();
-  // shackle
-  ctx.beginPath(); ctx.arc(96,68,22,Math.PI,0); ctx.stroke();
-  // C1K text
-  ctx.fillStyle='#fff';
-  ctx.font='900 56px Inter,sans-serif';
-  ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.shadowColor='rgba(0,0,0,.3)'; ctx.shadowBlur=4; ctx.shadowOffsetY=2;
-  ctx.fillText('C1K',96,138);
-  return c.toDataURL('image/png');
-}
-
+// PWA Manifest — dùng logo.png
 (function(){
-  const iconURL = makeAppleIconDataURL();
-  // Apple touch icon
-  const al=document.getElementById('apple-icon');
-  if(al) al.href = iconURL;
-  // Manifest
+  const iconURL = './logo.png';
   const manifest={
     name:"CLB C1K — Quản lý chi tiêu",
     short_name:"CLB C1K",
@@ -2026,11 +1981,10 @@ function makeAppleIconDataURL(){
 })();
 
 if('serviceWorker' in navigator){
-  const sw=`const CACHE='clb-c1k-v7';self.addEventListener('install',e=>self.skipWaiting());self.addEventListener('activate',e=>self.clients.claim());self.addEventListener('fetch',e=>e.respondWith(fetch(e.request).catch(()=>caches.match(e.request).then(r=>r||new Response('Offline')))));`;
+  const sw=`const CACHE='clb-c1k-v8';self.addEventListener('install',e=>self.skipWaiting());self.addEventListener('activate',e=>self.clients.claim());self.addEventListener('fetch',e=>e.respondWith(fetch(e.request).catch(()=>caches.match(e.request).then(r=>r||new Response('Offline')))));`;
   navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'})),{scope:'./'}).catch(()=>{});
 }
 
-// iOS install banner — RELAX điều kiện: iOS Safari OR Chrome, chưa standalone, chưa dismiss
 (function(){
   const ua=navigator.userAgent;
   const isIOS=/iPhone|iPad|iPod/i.test(ua);
