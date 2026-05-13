@@ -365,12 +365,12 @@ tr:hover td{background:rgba(255,255,255,.02)}
     border-right:none;border-top:1px solid var(--bord);z-index:200;overflow:visible;
     background:rgba(20,20,22,.94);backdrop-filter:blur(24px) saturate(180%);
     -webkit-backdrop-filter:blur(24px) saturate(180%);
-    height:64px;
+    height:68px;
   }
   .logo,nav.sidebar .sp,nav.sidebar .foot{display:none}
   nav.sidebar a.nav-link{
     flex:1;flex-direction:column;align-items:center;justify-content:center;
-    padding:6px 2px;font-size:10px;font-weight:600;gap:2px;
+    padding:10px 2px 6px;font-size:10px;font-weight:600;gap:3px;
     margin:0;border-radius:0;min-width:0;text-align:center;color:var(--mut);position:relative;
   }
   nav.sidebar a.nav-link.active{background:transparent;color:var(--acc)}
@@ -486,7 +486,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 <div id="abar" style="display:none">
   <span id="sync-dot"><span class="sync-led"></span><span id="sync-txt">Kết nối...</span></span>
   <span id="auth-badge"><i data-lucide="eye"></i> Chỉ xem</span>
-  <button class="btn bb btn-sm" id="btn-auth" onclick="openLoginScreen()"><i data-lucide="lock"></i> Đăng nhập</button>
+  <button class="btn bg btn-sm" id="btn-auth" onclick="openLoginScreen()"><i data-lucide="lock"></i> Đăng nhập</button>
 </div>
 
 <div class="shell" id="main-shell" style="display:none">
