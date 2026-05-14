@@ -52,6 +52,30 @@
   --sh:0 2px 8px rgba(0,0,0,.4); --sh-lg:0 12px 40px rgba(0,0,0,.5);
   --ease:cubic-bezier(.22,1,.36,1);
 }
+  /* ─── LIGHT THEME ─── */
+body.light{
+  --bg:#f8f9fb; --bg-2:#ffffff;
+  --surf:#ffffff; --surf-2:#f3f4f7; --surf-3:#e7e9ee;
+  --bord:rgba(0,0,0,.08); --bord-2:rgba(0,0,0,.12); --bord-3:rgba(0,0,0,.18);
+  --acc:#ea7f0c; --acc-2:#d97509; --acc-d:rgba(247,147,26,.12); --acc-glow:rgba(247,147,26,.25);
+  --grn:#16a34a; --grn-d:rgba(22,163,74,.10);
+  --red:#dc2626; --red-d:rgba(220,38,38,.10);
+  --yel:#ca8a04; --yel-d:rgba(202,138,4,.10);
+  --pur:#9333ea; --pur-d:rgba(147,51,234,.10);
+  --txt:#0a0a0b; --txt-2:#27272a; --txt-3:#52525b; --mut:#71717a;
+  --sh:0 2px 8px rgba(0,0,0,.08); --sh-lg:0 12px 40px rgba(0,0,0,.15);
+}
+body.light input,body.light select,body.light textarea{background:#fff;color:var(--txt)}
+body.light input:focus,body.light select:focus,body.light textarea:focus{background:#fff}
+body.light select option{background:#fff;color:var(--txt)}
+body.light .login-input{background:var(--bg-2)}
+body.light #abar{background:rgba(255,255,255,.85)}
+body.light nav.sidebar{background:#fff}
+body.light input[type="date"]{color-scheme:light}
+body.light tr:hover td{background:rgba(0,0,0,.03)}
+@media(max-width:768px){
+  body.light nav.sidebar{background:rgba(255,255,255,.94)}
+}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{overflow-x:hidden}
 body{
@@ -566,8 +590,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
           </div>
         </div>
         <div style="background:var(--red-d);border:1px solid rgba(239,68,68,.18);border-radius:9px;padding:10px 13px;font-size:11.5px;line-height:1.7">
-          <div style="display:flex;align-items:flex-start;gap:6px;margin-bottom:5px"><i data-lucide="alert-triangle" style="width:13px;height:13px;color:var(--red);flex-shrink:0;margin-top:1px"></i><span style="color:var(--txt-2)">Nếu số dư <span style="color:var(--red);font-weight:700">âm</span>, ghi nội dung: <span style="color:var(--yel);font-weight:600">tên của bạn</span></span></div>
-          <div style="display:flex;align-items:flex-start;gap:6px"><i data-lucide="pin" style="width:13px;height:13px;color:var(--acc);flex-shrink:0;margin-top:1px"></i><span style="color:var(--acc)">Lãi 10% nợ tháng cũ qua tháng mới (vào quỹ team)</span></div>
+          <div style="display:flex;align-items:flex-start;gap:6px;margin-bottom:5px"><i data-lucide="alert-triangle" style="width:13px;height:13px;color:var(--red);flex-shrink:0;margin-top:1px"></i><span style="color:var(--txt-2)">Nếu số dư <span style="color:var(--red);font-weight:700">âm</span>, vui lòng thanh toán và ghi nội dung ck: <span style="color:var(--yel);font-weight:600">tên của bạn</span></span></div>
+          <div style="display:flex;align-items:flex-start;gap:6px"><i data-lucide="pin" style="width:13px;height:13px;color:var(--acc);flex-shrink:0;margin-top:1px"></i><span style="color:var(--acc)">Lãi 10% sẽ áp dụng vào nợ tháng cũ khi qua tháng mới (vào quỹ team)</span></div>
         </div>
       </div>
     </div>
@@ -768,9 +792,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <p class="tm mb12">Xoá toàn bộ dữ liệu. Không thể hoàn tác.</p>
       <button class="btn bd wo" onclick="clearAll()"><i data-lucide="trash-2"></i> Xoá tất cả</button>
     </div>
-    <div class="card mt20">
+   <div class="card mt20">
       <div class="sec"><i data-lucide="settings-2"></i> Tuỳ chọn</div>
       <div class="fl g12" style="flex-wrap:wrap">
+        <label class="chip" id="theme-toggle" onclick="toggleTheme()"><i data-lucide="moon" style="width:13px;height:13px"></i> <span id="theme-label">Dark mode</span></label>
         <label class="chip" id="sound-toggle" onclick="toggleSound()"><i data-lucide="volume-2" style="width:13px;height:13px"></i> Âm thanh phản hồi</label>
         <button class="btn bg btn-sm" onclick="showInstallGuide()"><i data-lucide="smartphone"></i> Cài app ra màn hình</button>
       </div>
@@ -956,6 +981,24 @@ function toggleSound(){
   localStorage.setItem('clb_sound',soundOn?'on':'off');
   document.getElementById('sound-toggle')?.classList.toggle('on',soundOn);
   toast(soundOn?'🔊 Bật âm thanh':'🔇 Tắt âm thanh');
+}
+function toggleTheme(){
+  const isLight = document.body.classList.toggle('light');
+  localStorage.setItem('clb_theme', isLight?'light':'dark');
+  updateThemeUI(isLight);
+  // Cập nhật meta theme-color cho status bar iOS
+  document.querySelector('meta[name="theme-color"]').setAttribute('content', isLight?'#f8f9fb':'#0a0a0b');
+  toast(isLight?'☀️ Light mode':'🌙 Dark mode');
+}
+function updateThemeUI(isLight){
+  const el = document.getElementById('theme-toggle');
+  const lb = document.getElementById('theme-label');
+  if(!el) return;
+  el.classList.toggle('on', !isLight); // chip "on" khi dark (mặc định)
+  if(lb) lb.textContent = isLight ? 'Light mode' : 'Dark mode';
+  // Đổi icon
+  const ic = el.querySelector('[data-lucide]');
+  if(ic){ ic.setAttribute('data-lucide', isLight?'sun':'moon'); refreshIcons(); }
 }
 
 function haptic(ms=8){ if(navigator.vibrate) navigator.vibrate(ms); }
@@ -1922,7 +1965,13 @@ document.getElementById('exp-mo').value=new Date().getMonth()+1;
 document.getElementById('exp-yr').value=new Date().getFullYear();
 
 if(soundOn) document.getElementById('sound-toggle')?.classList.add('on');
-
+// Restore theme
+const savedTheme = localStorage.getItem('clb_theme') || 'dark';
+if(savedTheme === 'light'){
+  document.body.classList.add('light');
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#f8f9fb');
+}
+setTimeout(()=>updateThemeUI(savedTheme==='light'), 100);
 setSplitMode('split');
 render();
 refreshIcons();
